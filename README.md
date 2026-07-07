@@ -1,48 +1,62 @@
 # Malaria Guide 🦟
 
-> **Predict. Prevent. Educate.** > A real-time malaria monitoring, forecasting, and regional outbreak management dashboard prototype.
+> **Predict. Prevent. Educate.**
+> A real-time malaria monitoring, forecasting, and regional outbreak management dashboard prototype.
 
-This repository features a decoupled architecture containing a lightweight **Express.js backend API** providing mock security/metric feeds, and a **Next.js (React) frontend app** styled with Tailwind CSS.
+Malaria Guide is a full-stack web application designed to monitor malaria trends, forecast potential outbreaks, and provide regional health insights through an interactive dashboard. The application combines a lightweight Express.js backend API with a modern Next.js frontend to deliver real-time visualization of outbreak data and health metrics.
 
----
+## Features
 
-## 📂 Project Structure
+*  Real-time malaria outbreak dashboard
+*  Forecasting and trend visualization
+*  Regional outbreak monitoring
+*  Mock authentication system
+*  Fast and responsive user interface
+*  Built with Tailwind CSS for a clean, modern design
 
-```text
-malaria-guide/
-├── .gitignore             # Git exclusion rules
-├── README.md              # Setup instructions & API Reference
-├── backend/
-│   ├── routes/
-│   │   ├── auth.js        # Mock sign-in security endpoint
-│   │   └── dashboard.js   # Real-time outbreak metric feeds
-│   ├── package.json       # Express dependencies
-│   └── server.js          # Application entry point & gateway
-└── frontend/
-    ├── components/
-    │   ├── BottomNavbar.jsx
-    │   ├── ForecastChart.jsx
-    │   ├── OutbreakList.jsx
-    │   ├── QuickActions.jsx
-    │   └── StatsCard.jsx
-    ├── pages/
-    │   ├── _app.jsx
-    │   ├── index.jsx      # Login page
-    │   └── dashboard.jsx  # Main application screen
-    ├── styles/
-    │   └── globals.css
-    ├── postcss.config.js
-    ├── tailwind.config.js
-    └── package.json
+## Tech Stack
 
-```
-git clone [https://github.com/Hellen684/MalariaGuide.git](https://github.com/Hellen684/MalariaGuide.git)
+### Frontend
+
+* Next.js (React)
+* Tailwind CSS
+
+### Backend
+
+* Express.js
+* Node.js
+
+## Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Hellen684/MalariaGuide.git
 cd MalariaGuide
+```
 
+### 2. Install and run the backend
+
+```bash
 cd backend
 npm install
 npm start
+```
 
+The backend server will start on its configured port.
+
+### 3. Install and run the frontend
+
+Open a new terminal and run:
+
+```bash
 cd frontend
 npm install
 npm run dev
+```
+
+The frontend development server will then be available in your browser.
+
+## Purpose
+
+This project demonstrates a prototype for malaria surveillance and outbreak management. It showcases how real-time data visualization, forecasting, and regional analytics can support public health awareness and decision-making.
