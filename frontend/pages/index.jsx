@@ -93,6 +93,12 @@ export default function Login() {
             {loading ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
+        <div className="mt-6 text-center text-sm text-gray-500 font-medium">
+          Don't have an account?{' '}
+          <a href="#" className="text-[#10a396] font-bold hover:underline">
+            Sign Up
+          </a>
+        </div>
       </div>
     </div>
   );
