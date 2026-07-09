@@ -27,7 +27,7 @@ CREATE TABLE cases (
     id SERIAL PRIMARY KEY,
     location VARCHAR(100) NOT NULL,
     cases_count INT NOT NULL DEFAULT 0,
-    severity VARCHAR(20) CHECK (severity IN ('low', 'medium', 'high')),
+    severity VARCHAR(20) CHECK (severity IN ('safe', 'low', 'medium', 'high')),
     reported_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     details TEXT,
     reported_by INT REFERENCES users(id) ON DELETE SET NULL

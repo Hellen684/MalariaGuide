@@ -46,12 +46,12 @@ async function run() {
 
     // 2. Seed cases
     const casesData = [
-      ['Kambia District', 45, 'high', 'Significant rise in water-borne vectors due to recent flooding near the northern border. Recommended actions include mass distribution of LLINs and indoor residual spraying.'],
-      ['Kenema Region', 28, 'medium', 'Moderate vector density reported. Community health workers are actively monitoring fever cases and administering rapid diagnostic tests.'],
-      ['Port Loko', 12, 'low', 'Low transmission rate maintained. Preventive larviciding has been successfully completed across key breeding reservoirs.'],
-      ['Makeni City', 52, 'high', 'Heavy infestation reported in peri-urban sectors. Emergency therapeutic response has been deployed alongside community sensitization campaigns.'],
-      ['Bo Town', 31, 'medium', 'Slight seasonal case uptick. Medical facilities report stable supplies of ACT antimalarials, but caution is advised in low-lying sections.'],
-      ['Freetown Rural', 8, 'low', 'Excellent compliance with weekly net usage. Mosquito populations remain under control due to active drainage maintenance.']
+      ['Kampala', 65, 'high', 'Significant rise in malaria cases in densely populated Kampala suburbs. Slum areas around Bwaise and Katanga show high transmission rates due to poor drainage and stagnant water. Mass distribution of LLINs and indoor residual spraying are underway.'],
+      ['Gulu', 58, 'high', 'Northern Uganda continues to face heavy malaria burden. Flooding along the Acholi sub-region has increased mosquito breeding grounds. Emergency therapeutic response deployed alongside community sensitization campaigns.'],
+      ['Jinja', 30, 'medium', 'Moderate vector density reported along the shores of Lake Victoria and the Nile outlet. Community health workers are actively monitoring fever cases and administering rapid diagnostic tests across Jinja Municipality.'],
+      ['Mukono', 25, 'medium', 'Slight seasonal case uptick in peri-urban Mukono. Medical facilities report stable supplies of ACT antimalarials, but caution is advised in low-lying wetland sections near Mabira Forest.'],
+      ['Wakiso', 10, 'low', 'Low transmission rate maintained in most of Wakiso District. Preventive larviciding has been successfully completed across key breeding reservoirs in Entebbe and Nansana sub-counties.'],
+      ['Mbarara', 2, 'safe', 'Excellent compliance with weekly net usage across Mbarara District. Mosquito populations remain under control due to the high altitude and active drainage maintenance by local councils.']
     ];
 
     for (const item of casesData) {
@@ -65,40 +65,40 @@ async function run() {
     // 3. Seed alerts
     const alertsData = [
       [
-        'High Risk Outbreak', 'Kambia District', 
-        'Significant increase in malaria cases reported. Immediate intervention required.', 
-        '2 hours ago', 45, 'increasing', 'critical',
-        'Over the last 72 hours, local clinics in Kambia have reported a 40% surge in positive malaria rapid diagnostic test results. Vector control teams have been dispatched with bed nets and diagnostic test kits. Local population is advised to stay indoors after dusk and secure all open windows.'
+        'High Risk Outbreak', 'Kampala', 
+        'Significant increase in malaria cases reported in Kampala. Immediate intervention required.', 
+        '2 hours ago', 65, 'increasing', 'critical',
+        'Over the last 72 hours, health centres in Bwaise, Katanga, and Kisenyi have reported a 40% surge in positive malaria rapid diagnostic test results. Vector control teams from Kampala Capital City Authority have been dispatched with bed nets and diagnostic test kits. Residents are advised to stay indoors after dusk and secure all open windows.'
       ],
       [
-        'Medium Risk Alert', 'Kenema Region', 
-        'Moderate rise in malaria cases. Monitor situation closely.', 
-        '5 hours ago', 28, 'stable', 'warning',
-        'Case reports in Kenema show a steady baseline with minor local clusters. Surveillance has been heightened. Local health centers are fully stocked with Artemether-Lumefantrine treatment courses. No immediate lockdown or emergency actions are required, but continuous monitoring is ongoing.'
+        'Northern Uganda Alert', 'Gulu', 
+        'Heavy malaria burden persists in Gulu District. Monitor situation closely.', 
+        '4 hours ago', 58, 'increasing', 'critical',
+        'Gulu Regional Referral Hospital reports a sustained increase in malaria admissions. Flooding in the Acholi sub-region has created extensive mosquito breeding sites. Emergency IRS teams have been mobilized across affected sub-counties.'
       ],
       [
-        'Weather Advisory', 'Port Loko', 
-        'Heavy rainfall expected. Increased mosquito breeding risk.', 
-        '8 hours ago', null, null, 'advisory',
-        'Meteorological projections forecast 150mm of rainfall over the next week in Port Loko, likely causing standing water pools in low-elevation valleys. Community leaders are requested to initiate drainage clearing campaigns immediately. Insecticide distribution points have been set up at central community markets.'
+        'Medium Risk Alert', 'Jinja', 
+        'Moderate rise in malaria cases along the Lake Victoria shore. Monitoring ongoing.', 
+        '5 hours ago', 30, 'stable', 'warning',
+        'Case reports in Jinja show a steady baseline with minor local clusters near the Nile source. Surveillance has been heightened. Jinja Regional Referral Hospital is fully stocked with Artemether-Lumefantrine treatment courses. Continuous monitoring is ongoing.'
       ],
       [
-        'Treatment Shortage', 'Makeni City', 
-        'Low stock of antimalarial medication. Resupply needed.', 
-        '1 day ago', 52, 'increasing', 'warning',
-        'Makeni Central Pharmacy reports inventory of primary antimalarial treatments has dropped below a 5-day buffer. Medical logistics is coordinating an emergency delivery from central stores. Patients seeking treatment are currently redirected to neighboring sub-clinics.'
+        'Seasonal Uptick', 'Mukono', 
+        'New cluster of cases identified in Mukono wetland areas.', 
+        '1 day ago', 25, 'increasing', 'warning',
+        'Multiple households near Mabira Forest and wetland zones in Mukono have reported malaria symptoms. Outdoor larval control spraying is scheduled for this week. Families in the area are receiving free replacement insecticide-treated nets (ITNs).'
       ],
       [
-        'Community Alert', 'Bo Town', 
-        'New cluster of cases identified in northern sector.', 
-        '1 day ago', 31, 'increasing', 'warning',
-        'Twelve households in the northern outskirts of Bo Town have reported malaria symptoms concurrently. Outdoor larval control spraying is scheduled for tomorrow morning. Families in the area are receiving free replacement insecticide-treated nets (ITNs).'
+        'Weather Advisory', 'Wakiso', 
+        'Heavy rainfall expected in Wakiso. Increased mosquito breeding risk.', 
+        '8 hours ago', 10, null, 'advisory',
+        'Meteorological projections forecast 120mm of rainfall over the next week in Wakiso District, likely causing standing water pools in Entebbe and Nansana. Community leaders are requested to initiate drainage clearing campaigns immediately.'
       ],
       [
-        'Prevention Success', 'Freetown Rural', 
-        'Mosquito net distribution campaign showing positive results.', 
-        '2 days ago', 8, 'decreasing', 'success',
-        'Following the distribution of 5,000 long-lasting insecticidal nets (LLINs) in Freetown Rural, active malaria cases have dropped by 65% over the past two weeks. Clinic consultation rates for fever symptoms have reached an all-time low for this season. Outstanding job by community health educators!'
+        'Prevention Success', 'Mbarara', 
+        'Mosquito net distribution campaign showing excellent results in Mbarara.', 
+        '2 days ago', 2, 'decreasing', 'success',
+        'Following the distribution of 8,000 long-lasting insecticidal nets (LLINs) across Mbarara District, active malaria cases have dropped to near-zero levels. High altitude and effective community health education have contributed to this success. Outstanding work by Mbarara District health teams!'
       ]
     ];
 

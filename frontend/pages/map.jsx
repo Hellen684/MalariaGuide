@@ -1,22 +1,47 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import BottomNavbar from '../components/BottomNavbar';
+
+const OSMMap = dynamic(() => import('../components/OSMMap'), { ssr: false });
 
 export default function RiskMap() {
   const router = useRouter();
   const handleLogout = () => router.push('/');
   const [searchQuery, setSearchQuery] = useState('');
-  const [riskFilter, setRiskFilter] = useState('all'); // all, high, medium, low
+  const [riskFilter, setRiskFilter] = useState('all'); // all, high, medium, low, safe
   const [selectedArea, setSelectedArea] = useState(null);
+  
+  const currentDate = new Date();
+  const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth() + 1);
+  const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+  
+  const [areas, setAreas] = useState([]);
 
-  const areas = [
-    { id: 'kambia', name: 'Kambia District', status: 'high', population: '2,400', cases: 45, coordinate: { x: 120, y: 80, r: 16 }, details: 'Significant rise in water-borne vectors due to recent flooding near the northern border. Recommended actions include mass distribution of LLINs and indoor residual spraying.' },
-    { id: 'kenema', name: 'Kenema Region', status: 'medium', population: '3,200', cases: 28, coordinate: { x: 380, y: 150, r: 12 }, details: 'Moderate vector density reported. Community health workers are actively monitoring fever cases and administering rapid diagnostic tests.' },
-    { id: 'portloko', name: 'Port Loko', status: 'low', population: '1,800', cases: 12, coordinate: { x: 150, y: 190, r: 8 }, details: 'Low transmission rate maintained. Preventive larviciding has been successfully completed across key breeding reservoirs.' },
-    { id: 'makeni', name: 'Makeni City', status: 'high', population: '4,100', cases: 52, coordinate: { x: 250, y: 100, r: 18 }, details: 'Heavy infestation reported in peri-urban sectors. Emergency therapeutic response has been deployed alongside community sensitization campaigns.' },
-    { id: 'botown', name: 'Bo Town', status: 'medium', population: '2,900', cases: 31, coordinate: { x: 300, y: 220, r: 14 }, details: 'Slight seasonal case uptick. Medical facilities report stable supplies of ACT antimalarials, but caution is advised in low-lying sections.' },
-    { id: 'freetown', name: 'Freetown Rural', status: 'low', population: '1,200', cases: 8, coordinate: { x: 80, y: 240, r: 8 }, details: 'Excellent compliance with weekly net usage. Mosquito populations remain under control due to active drainage maintenance.' }
-  ];
+  useEffect(() => {
+    fetchAreas();
+  }, [selectedMonth, selectedYear]);
+
+  const fetchAreas = async () => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/cases/monthly-risk?month=${selectedMonth}&year=${selectedYear}`);
+      if (res.ok) {
+        const data = await res.json();
+        // Transform the backend data for the frontend
+        const transformedData = data.map(zone => ({
+          id: zone.location.toLowerCase(),
+          name: zone.location,
+          status: zone.severity,
+          population: 'Unknown', // Could be fetched from a config
+          cases: zone.totalCases,
+          details: `Aggregated data for ${selectedMonth}/${selectedYear}.`
+        }));
+        setAreas(transformedData);
+      }
+    } catch (error) {
+      console.error('Failed to fetch risk zones:', error);
+    }
+  };
 
   const filteredAreas = areas.filter(area => {
     const matchesSearch = area.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -26,7 +51,6 @@ export default function RiskMap() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-28">
-      {/* Risk Map Header */}
       <div className="bg-[#10a396] text-white pt-8 pb-12 px-6 rounded-b-[32px] shadow-md">
         <div className="max-w-5xl mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-3.5">
@@ -45,9 +69,8 @@ export default function RiskMap() {
       </div>
 
       <main className="max-w-5xl mx-auto px-4 -mt-6 space-y-6 relative z-10">
-        {/* Search & Filter Controls */}
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center space-x-3">
-          <div className="relative flex-1">
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-wrap gap-3 items-center">
+          <div className="relative flex-1 min-w-[200px]">
             <input 
               type="text"
               placeholder="Search location..."
@@ -60,107 +83,43 @@ export default function RiskMap() {
             </svg>
           </div>
           
-          <div className="relative">
-            <select
-              value={riskFilter}
-              onChange={(e) => setRiskFilter(e.target.value)}
-              className="appearance-none bg-teal-50 border border-teal-100 text-[#10a396] font-bold text-sm py-3 pl-4 pr-10 rounded-xl focus:outline-none cursor-pointer"
-            >
-              <option value="all">All Risks</option>
-              <option value="high">High Risk</option>
-              <option value="medium">Medium Risk</option>
-              <option value="low">Low Risk</option>
-            </select>
-            <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#10a396] pointer-events-none">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-              </svg>
-            </div>
-          </div>
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            className="appearance-none bg-teal-50 border border-teal-100 text-[#10a396] font-bold text-sm py-3 pl-4 pr-4 rounded-xl focus:outline-none cursor-pointer"
+          >
+            {[...Array(12)].map((_, i) => (
+              <option key={i+1} value={i+1}>{new Date(0, i).toLocaleString('default', { month: 'long' })}</option>
+            ))}
+          </select>
+          
+          <select
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
+            className="appearance-none bg-teal-50 border border-teal-100 text-[#10a396] font-bold text-sm py-3 pl-4 pr-4 rounded-xl focus:outline-none cursor-pointer"
+          >
+            {[2024, 2025, 2026].map(y => (
+              <option key={y} value={y}>{y}</option>
+            ))}
+          </select>
+
+          <select
+            value={riskFilter}
+            onChange={(e) => setRiskFilter(e.target.value)}
+            className="appearance-none bg-teal-50 border border-teal-100 text-[#10a396] font-bold text-sm py-3 pl-4 pr-10 rounded-xl focus:outline-none cursor-pointer relative"
+          >
+            <option value="all">All Risks</option>
+            <option value="high">High Risk</option>
+            <option value="medium">Medium Risk</option>
+            <option value="low">Low Risk</option>
+            <option value="safe">Safe</option>
+          </select>
         </div>
 
-        {/* Dynamic Stylized Map View */}
         <div className="bg-white rounded-[24px] shadow-sm border border-gray-100 p-5 relative overflow-hidden">
-          <div className="relative w-full aspect-[4/3] bg-teal-50/30 rounded-2xl border border-teal-50 flex items-center justify-center">
-            
-            {/* SVG Background Geography */}
-            <svg viewBox="0 0 500 320" className="w-full h-full opacity-90 select-none">
-              <defs>
-                <radialGradient id="mapGrad" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#e0f2f1" stopOpacity="0.6" />
-                  <stop offset="100%" stopColor="#b2dfdb" stopOpacity="0.2" />
-                </radialGradient>
-              </defs>
-              
-              {/* Landmass shapes mockups */}
-              <path d="M 50,50 Q 120,30 200,60 T 350,40 Q 420,80 460,140 T 450,260 Q 320,300 200,280 T 50,200 Z" fill="url(#mapGrad)" stroke="#10a396" strokeWidth="1" strokeDasharray="3 3" />
-              <path d="M 180,60 Q 230,120 250,180 T 320,290" fill="none" stroke="#10a396" strokeWidth="0.5" opacity="0.3" />
-              <path d="M 80,130 Q 220,160 380,120" fill="none" stroke="#10a396" strokeWidth="0.5" opacity="0.3" />
-
-              {/* Pulsing Hotspots */}
-              {areas.map((area) => {
-                const isFilteredOut = riskFilter !== 'all' && area.status !== riskFilter;
-                const dotColor = area.status === 'high' ? 'fill-red-500 stroke-red-100' :
-                                 area.status === 'medium' ? 'fill-orange-400 stroke-orange-100' : 'fill-green-500 stroke-green-100';
-                
-                return (
-                  <g 
-                    key={area.id} 
-                    className={`cursor-pointer transition-all duration-300 ${isFilteredOut ? 'opacity-10' : 'opacity-100 hover:scale-110'}`}
-                    onClick={() => setSelectedArea(area)}
-                  >
-                    {/* Ring Pulse */}
-                    <circle 
-                      cx={area.coordinate.x} 
-                      cy={area.coordinate.y} 
-                      r={area.coordinate.r + 6} 
-                      className={`animate-ping origin-center ${
-                        area.status === 'high' ? 'fill-red-400/20' : 
-                        area.status === 'medium' ? 'fill-orange-400/20' : 'fill-green-400/20'
-                      }`}
-                      style={{ animationDuration: '3s' }}
-                    />
-                    {/* Main Dot */}
-                    <circle 
-                      cx={area.coordinate.x} 
-                      cy={area.coordinate.y} 
-                      r={area.coordinate.r} 
-                      className={`${dotColor} stroke-4 shadow-md`}
-                    />
-                    {/* Tag label */}
-                    <text 
-                      x={area.coordinate.x} 
-                      y={area.coordinate.y - area.coordinate.r - 4} 
-                      textAnchor="middle" 
-                      className="text-[10px] font-bold fill-gray-700 bg-white"
-                    >
-                      {area.name.split(' ')[0]}
-                    </text>
-                  </g>
-                );
-              })}
-            </svg>
-
-            {/* Map Legend */}
-            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-4 py-3 rounded-2xl shadow-md border border-gray-100 text-xs font-semibold text-gray-700 space-y-2">
-              <div className="text-[10px] uppercase tracking-wider text-gray-400 mb-1">Risk Levels</div>
-              <div className="flex items-center space-x-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-500 block"></span>
-                <span>High Risk</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-orange-400 block"></span>
-                <span>Medium Risk</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-green-500 block"></span>
-                <span>Low Risk</span>
-              </div>
-            </div>
-          </div>
+          <OSMMap riskData={filteredAreas.map(a => ({ location: a.name, severity: a.status, totalCases: a.cases }))} />
         </div>
 
-        {/* Affected Areas List */}
         <div>
           <h2 className="text-gray-900 font-bold text-lg mb-4">Affected Areas</h2>
           <div className="space-y-3">
@@ -171,10 +130,11 @@ export default function RiskMap() {
                   className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-center space-x-4">
-                    {/* Icon matching badge status */}
                     <div className={`w-10 h-10 rounded-2xl flex items-center justify-center ${
                       area.status === 'high' ? 'bg-red-50 text-red-500' :
-                      area.status === 'medium' ? 'bg-orange-50 text-orange-400' : 'bg-green-50 text-green-500'
+                      area.status === 'medium' ? 'bg-orange-50 text-orange-400' : 
+                      area.status === 'low' ? 'bg-yellow-50 text-yellow-500' :
+                      'bg-green-50 text-green-500'
                     }`}>
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
@@ -187,19 +147,19 @@ export default function RiskMap() {
                         <span className="font-bold text-gray-800 text-sm">{area.name}</span>
                         <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${
                           area.status === 'high' ? 'bg-red-100 text-red-700' :
-                          area.status === 'medium' ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'
+                          area.status === 'medium' ? 'bg-orange-100 text-orange-700' : 
+                          area.status === 'low' ? 'bg-yellow-100 text-yellow-700' :
+                          'bg-green-100 text-green-700'
                         }`}>
                           {area.status}
                         </span>
                       </div>
                       <div className="flex items-center space-x-3 text-xs text-gray-400 mt-1 font-semibold">
-                        <span>Population: {area.population}</span>
-                        <span>•</span>
                         <span className="flex items-center text-gray-500">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 text-gray-400 mr-1">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.008v.008H12v-.008Z" />
                           </svg>
-                          {area.cases} active cases
+                          {area.cases} cases this month
                         </span>
                       </div>
                     </div>
@@ -215,14 +175,13 @@ export default function RiskMap() {
               ))
             ) : (
               <div className="text-center py-8 bg-white rounded-2xl border border-gray-100 text-gray-400 text-sm">
-                No matching locations found
+                No matching locations found for this period
               </div>
             )}
           </div>
         </div>
       </main>
 
-      {/* Details Side Drawer / Modal popup */}
       {selectedArea && (
         <div className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center p-4 z-[100] backdrop-blur-sm">
           <div className="bg-white w-full max-w-md rounded-t-[32px] sm:rounded-[32px] p-6 shadow-2xl relative animate-in slide-in-from-bottom sm:slide-in-from-bottom-0 sm:zoom-in duration-200">
@@ -237,17 +196,15 @@ export default function RiskMap() {
               <h3 className="text-lg font-bold text-gray-900">{selectedArea.name}</h3>
               <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${
                 selectedArea.status === 'high' ? 'bg-red-100 text-red-700' :
-                selectedArea.status === 'medium' ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'
+                selectedArea.status === 'medium' ? 'bg-orange-100 text-orange-700' : 
+                selectedArea.status === 'low' ? 'bg-yellow-100 text-yellow-700' :
+                'bg-green-100 text-green-700'
               }`}>
                 {selectedArea.status} Risk
               </span>
             </div>
 
             <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-2xl mb-4 text-center">
-              <div>
-                <span className="text-[10px] uppercase text-gray-400 block font-bold">Estimated Population</span>
-                <span className="text-base font-bold text-gray-800">{selectedArea.population}</span>
-              </div>
               <div>
                 <span className="text-[10px] uppercase text-gray-400 block font-bold">Reported Cases</span>
                 <span className="text-base font-bold text-gray-800">{selectedArea.cases}</span>
@@ -288,7 +245,6 @@ export default function RiskMap() {
         </div>
       )}
 
-      {/* Bottom Navbar navigation */}
       <BottomNavbar currentPath="map" />
     </div>
   );

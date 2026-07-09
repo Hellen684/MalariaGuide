@@ -9,8 +9,8 @@ export default function Alerts() {
   const [selectedAlert, setSelectedAlert] = useState(null);
 
   const stats = [
-    { label: 'Critical', value: '1', color: 'bg-red-50 text-red-600 border-red-100' },
-    { label: 'Warning', value: '3', color: 'bg-orange-50 text-orange-600 border-orange-100' },
+    { label: 'Critical', value: '2', color: 'bg-red-50 text-red-600 border-red-100' },
+    { label: 'Warning', value: '2', color: 'bg-orange-50 text-orange-600 border-orange-100' },
     { label: 'Total', value: '6', color: 'bg-teal-50 text-[#10a396] border-teal-100' }
   ];
 
@@ -18,80 +18,80 @@ export default function Alerts() {
     {
       id: 1,
       title: 'High Risk Outbreak',
-      location: 'Kambia District',
-      description: 'Significant increase in malaria cases reported. Immediate intervention required.',
+      location: 'Kampala',
+      description: 'Significant increase in malaria cases reported in Kampala suburbs. Immediate intervention required.',
       time: '2 hours ago',
-      cases: '45 cases',
+      cases: '65 cases',
       trend: 'increasing',
       borderColor: 'border-l-red-500',
       iconBg: 'bg-red-50 text-red-500',
       trendClass: 'bg-red-100 text-red-700',
-      details: 'Over the last 72 hours, local clinics in Kambia have reported a 40% surge in positive malaria rapid diagnostic test results. Vector control teams have been dispatched with bed nets and diagnostic test kits. Local population is advised to stay indoors after dusk and secure all open windows.'
+      details: 'Over the last 72 hours, health centres in Bwaise, Katanga, and Kisenyi have reported a 40% surge in positive malaria rapid diagnostic test results. Vector control teams from Kampala Capital City Authority have been dispatched with bed nets and diagnostic test kits. Residents are advised to stay indoors after dusk and secure all open windows.'
     },
     {
       id: 2,
+      title: 'Northern Uganda Alert',
+      location: 'Gulu',
+      description: 'Heavy malaria burden persists in Gulu District. Monitor situation closely.',
+      time: '4 hours ago',
+      cases: '58 cases',
+      trend: 'increasing',
+      borderColor: 'border-l-red-500',
+      iconBg: 'bg-red-50 text-red-500',
+      trendClass: 'bg-red-100 text-red-700',
+      details: 'Gulu Regional Referral Hospital reports a sustained increase in malaria admissions. Flooding in the Acholi sub-region has created extensive mosquito breeding sites. Emergency IRS teams have been mobilized across affected sub-counties.'
+    },
+    {
+      id: 3,
       title: 'Medium Risk Alert',
-      location: 'Kenema Region',
-      description: 'Moderate rise in malaria cases. Monitor situation closely.',
+      location: 'Jinja',
+      description: 'Moderate rise in malaria cases along the Lake Victoria shore. Monitoring ongoing.',
       time: '5 hours ago',
-      cases: '28 cases',
+      cases: '30 cases',
       trend: 'stable',
       borderColor: 'border-l-orange-500',
       iconBg: 'bg-orange-50 text-orange-500',
       trendClass: 'bg-gray-100 text-gray-700',
-      details: 'Case reports in Kenema show a steady baseline with minor local clusters. Surveillance has been heightened. Local health centers are fully stocked with Artemether-Lumefantrine treatment courses. No immediate lockdown or emergency actions are required, but continuous monitoring is ongoing.'
+      details: 'Case reports in Jinja show a steady baseline with minor local clusters near the Nile source. Surveillance has been heightened. Jinja Regional Referral Hospital is fully stocked with Artemether-Lumefantrine treatment courses. Continuous monitoring is ongoing.'
     },
     {
-      id: 3,
+      id: 4,
+      title: 'Seasonal Uptick',
+      location: 'Mukono',
+      description: 'New cluster of cases identified in Mukono wetland areas.',
+      time: '1 day ago',
+      cases: '25 cases',
+      trend: 'increasing',
+      borderColor: 'border-l-orange-500',
+      iconBg: 'bg-orange-50 text-orange-500',
+      trendClass: 'bg-red-100 text-red-700',
+      details: 'Multiple households near Mabira Forest and wetland zones in Mukono have reported malaria symptoms. Outdoor larval control spraying is scheduled for this week. Families in the area are receiving free replacement insecticide-treated nets (ITNs).'
+    },
+    {
+      id: 5,
       title: 'Weather Advisory',
-      location: 'Port Loko',
-      description: 'Heavy rainfall expected. Increased mosquito breeding risk.',
+      location: 'Wakiso',
+      description: 'Heavy rainfall expected in Wakiso. Increased mosquito breeding risk.',
       time: '8 hours ago',
-      cases: null,
+      cases: '10 cases',
       trend: null,
       borderColor: 'border-l-blue-500',
       iconBg: 'bg-blue-50 text-blue-500',
       trendClass: null,
-      details: 'Meteorological projections forecast 150mm of rainfall over the next week in Port Loko, likely causing standing water pools in low-elevation valleys. Community leaders are requested to initiate drainage clearing campaigns immediately. Insecticide distribution points have been set up at central community markets.'
-    },
-    {
-      id: 4,
-      title: 'Treatment Shortage',
-      location: 'Makeni City',
-      description: 'Low stock of antimalarial medication. Resupply needed.',
-      time: '1 day ago',
-      cases: '52 cases',
-      trend: 'increasing',
-      borderColor: 'border-l-orange-500',
-      iconBg: 'bg-orange-50 text-orange-500',
-      trendClass: 'bg-red-100 text-red-700',
-      details: 'Makeni Central Pharmacy reports inventory of primary antimalarial treatments has dropped below a 5-day buffer. Medical logistics is coordinating an emergency delivery from central stores. Patients seeking treatment are currently redirected to neighboring sub-clinics.'
-    },
-    {
-      id: 5,
-      title: 'Community Alert',
-      location: 'Bo Town',
-      description: 'New cluster of cases identified in northern sector.',
-      time: '1 day ago',
-      cases: '31 cases',
-      trend: 'increasing',
-      borderColor: 'border-l-orange-500',
-      iconBg: 'bg-orange-50 text-orange-500',
-      trendClass: 'bg-red-100 text-red-700',
-      details: 'Twelve households in the northern outskirts of Bo Town have reported malaria symptoms concurrently. Outdoor larval control spraying is scheduled for tomorrow morning. Families in the area are receiving free replacement insecticide-treated nets (ITNs).'
+      details: 'Meteorological projections forecast 120mm of rainfall over the next week in Wakiso District, likely causing standing water pools in Entebbe and Nansana. Community leaders are requested to initiate drainage clearing campaigns immediately.'
     },
     {
       id: 6,
       title: 'Prevention Success',
-      location: 'Freetown Rural',
-      description: 'Mosquito net distribution campaign showing positive results.',
+      location: 'Mbarara',
+      description: 'Mosquito net distribution campaign showing excellent results in Mbarara.',
       time: '2 days ago',
-      cases: '8 cases',
+      cases: '2 cases',
       trend: 'decreasing',
       borderColor: 'border-l-green-500',
       iconBg: 'bg-green-50 text-green-500',
       trendClass: 'bg-green-100 text-green-700',
-      details: 'Following the distribution of 5,000 long-lasting insecticidal nets (LLINs) in Freetown Rural, active malaria cases have dropped by 65% over the past two weeks. Clinic consultation rates for fever symptoms have reached an all-time low for this season. Outstanding job by community health educators!'
+      details: 'Following the distribution of 8,000 long-lasting insecticidal nets (LLINs) across Mbarara District, active malaria cases have dropped to near-zero levels. High altitude and effective community health education have contributed to this success. Outstanding work by Mbarara District health teams!'
     }
   ];
 

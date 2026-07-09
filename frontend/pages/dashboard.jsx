@@ -19,9 +19,9 @@ export default function Dashboard() {
     },
     forecast: [45, 52, 68, 85, 124, 95],
     outbreaks: [
-      { id: 1, location: 'Kambia District', cases: 45, timeAgo: '2 hours ago', status: 'high' },
-      { id: 2, location: 'Kenema Region', cases: 28, timeAgo: '5 hours ago', status: 'medium' },
-      { id: 3, location: 'Port Loko', cases: 12, timeAgo: '1 day ago', status: 'low' }
+      { id: 1, location: 'Kampala', cases: 65, timeAgo: '2 hours ago', status: 'high' },
+      { id: 2, location: 'Jinja', cases: 30, timeAgo: '5 hours ago', status: 'medium' },
+      { id: 3, location: 'Wakiso', cases: 10, timeAgo: '1 day ago', status: 'low' }
     ]
   });
 
