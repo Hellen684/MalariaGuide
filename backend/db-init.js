@@ -4,6 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const { Client } = require('pg');
+const bcrypt = require('bcryptjs');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const connectionString = process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/malaria_guide';
@@ -34,11 +35,12 @@ async function run() {
     console.log('Seeding initial prototype records...');
 
     // 1. Seed user
+    const hashedPassword = await bcrypt.hash('admin123', 10);
     const userInsertResult = await client.query(`
       INSERT INTO users (name, email, password, role)
       VALUES ($1, $2, $3, $4)
       RETURNING id
-    `, ['Health Officer', 'officer@malariaguide.gov', 'admin123', 'health_officer']);
+    `, ['Health Officer', 'officer@malariaguide.gov', hashedPassword, 'health_officer']);
     const officerId = userInsertResult.rows[0].id;
     console.log(`Created mock user 'Health Officer' with ID ${officerId}`);
 

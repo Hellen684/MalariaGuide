@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import BottomNavbar from '../components/BottomNavbar';
 
 export default function RiskMap() {
+  const router = useRouter();
+  const handleLogout = () => router.push('/');
   const [searchQuery, setSearchQuery] = useState('');
   const [riskFilter, setRiskFilter] = useState('all'); // all, high, medium, low
   const [selectedArea, setSelectedArea] = useState(null);
@@ -25,9 +28,19 @@ export default function RiskMap() {
     <div className="min-h-screen bg-gray-50 pb-28">
       {/* Risk Map Header */}
       <div className="bg-[#10a396] text-white pt-8 pb-12 px-6 rounded-b-[32px] shadow-md">
-        <div className="max-w-5xl mx-auto">
-          <h1 className="text-2xl font-bold">Risk Map</h1>
-          <p className="text-sm opacity-80">Geographic malaria risk profiling</p>
+        <div className="max-w-5xl mx-auto flex justify-between items-center">
+          <div className="flex items-center space-x-3.5">
+            <img src="/logo.jpeg" alt="Malaria Guide Logo" className="w-11 h-11 rounded-full object-cover border border-white/20 shadow-sm" />
+            <div>
+              <h1 className="text-2xl font-bold">Risk Map</h1>
+              <p className="text-sm opacity-80">Geographic malaria risk profiling</p>
+            </div>
+          </div>
+          <button onClick={handleLogout} className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-full transition-all" title="Logout">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+            </svg>
+          </button>
         </div>
       </div>
 
