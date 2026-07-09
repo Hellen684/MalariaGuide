@@ -44,3 +44,8 @@ Desktop.ini
 *.njsproj
 *.sln
 *.sw?
+
+prototype
+
+# dev folders
+images/
