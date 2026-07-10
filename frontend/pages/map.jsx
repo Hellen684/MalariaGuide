@@ -24,7 +24,7 @@ export default function RiskMap() {
 
   const fetchAreas = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/cases/monthly-risk?month=${selectedMonth}&year=${selectedYear}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cases/monthly-risk?month=${selectedMonth}&year=${selectedYear}`);
       if (res.ok) {
         const data = await res.json();
         // Transform the backend data for the frontend

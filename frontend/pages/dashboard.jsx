@@ -26,7 +26,7 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/dashboard/data')
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/data`)
       .then(res => res.json())
       .then(data => data.stats && setMetrics(data))
       .catch(() => console.log("Running in prototype mode (using fallback data)."));
